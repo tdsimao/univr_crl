@@ -72,7 +72,7 @@ class LinearProgrammingPlanner:
         :param kwargs: args for planner
         :return: a planner
         """
-        transition, reward, cost, terminal = get_mdp_functions(env)
+        transition, reward, cost, terminal, isd = get_mdp_functions(env)
         for s in np.arange(env.nS)[terminal]:
             transition[s, :, :] = 0
             transition[s, :, s] = 1
@@ -80,7 +80,7 @@ class LinearProgrammingPlanner:
             cost[s, :] = 0
         max_reward, min_reward = reward.max(), reward.min()
         max_cost, min_cost = cost.max(), cost.min()
-        return cls(transition, reward, cost, terminal, env.isd, env, max_reward, min_reward, max_cost, min_cost, **kwargs)
+        return cls(transition, reward, cost, terminal, isd, env, max_reward, min_reward, max_cost, min_cost, **kwargs)
 
     def solve(self):
         t0 = time.perf_counter()
