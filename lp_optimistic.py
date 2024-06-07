@@ -30,7 +30,7 @@ class OptimisticLinearProgrammingPlanner(LinearProgrammingPlanner):
         self.transition_ub = np.clip(self.transition + self.t_ci, 0, 1)
         self.transition_lb = np.clip(self.transition - self.t_ci, 0, 1)
 
-    def instantiate_lp_cvxpy(self):
+    def instantiate_lp(self):
         # variables
         # y is the occupancy on time step h of the tuple s,a,s'
         self.y = [
@@ -47,7 +47,7 @@ class OptimisticLinearProgrammingPlanner(LinearProgrammingPlanner):
         for h in range(self.horizon):
             self.exp_cost += cv.sum(cv.multiply(self.x[h], self.cost))
             for s in self.states:
-                self.exp_reward += cv.sum(cv.multiply(self.x[h][s], self.reward))
+                self.exp_reward += cv.sum(cv.multiply(self.x[h][s], self.reward[s]))
 
         # objective
         obj = cv.Maximize(self.exp_reward)
